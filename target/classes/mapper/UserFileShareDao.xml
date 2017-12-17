@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusCloudStorage.dao.UserFileShareDao">
+  <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.UserFileShare">
+    <id column="u_id" jdbcType="INTEGER" property="uId" />
+    <id column="f_id" jdbcType="INTEGER" property="fId" />
+    <result column="remark" jdbcType="VARCHAR" property="remark" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    u_id, f_id, remark
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFileShareKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_file_share
+    where u_id = #{uId,jdbcType=INTEGER}
+      and f_id = #{fId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFileShareKey">
+    delete from user_file_share
+    where u_id = #{uId,jdbcType=INTEGER}
+      and f_id = #{fId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByFId" parameterType="integer">
+    delete from user_file_share
+    where f_id = #{fId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.campusCloudStorage.entity.UserFileShare">
+    insert into user_file_share (u_id, f_id, remark
+      )
+    values (#{uId,jdbcType=INTEGER}, #{fId,jdbcType=INTEGER}, #{remark,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.campusCloudStorage.entity.UserFileShare">
+    insert into user_file_share
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        u_id,
+      </if>
+      <if test="fId != null">
+        f_id,
+      </if>
+      <if test="remark != null">
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+      <if test="fId != null">
+        #{fId,jdbcType=INTEGER},
+      </if>
+      <if test="remark != null">
+        #{remark,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.campusCloudStorage.entity.UserFileShare">
+    update user_file_share
+    <set>
+      <if test="remark != null">
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where u_id = #{uId,jdbcType=INTEGER}
+      and f_id = #{fId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFileShare">
+    update user_file_share
+    set remark = #{remark,jdbcType=VARCHAR}
+    where u_id = #{uId,jdbcType=INTEGER}
+      and f_id = #{fId,jdbcType=INTEGER}
+  </update>
+</mapper>

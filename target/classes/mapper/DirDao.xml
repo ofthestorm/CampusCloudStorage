@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusCloudStorage.dao.DirDao">
+  <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.Dir">
+    <id column="d_id" jdbcType="INTEGER" property="dId" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="create_time" jdbcType="TIMESTAMP" property="createTime" />
+    <result column="parent" jdbcType="INTEGER" property="parent" />
+  </resultMap>
+
+  <sql id="Base_Column_List">
+    d_id, name, create_time, parent
+  </sql>
+
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from dir
+    where d_id = #{dId,jdbcType=INTEGER}
+  </select>
+
+  <select id="selectByParentId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from dir
+    where parent = #{parentId,jdbcType=INTEGER}
+  </select>
+
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from dir
+    where d_id = #{dId,jdbcType=INTEGER}
+  </delete>
+
+  <insert id="insert" parameterType="com.campusCloudStorage.entity.Dir" useGeneratedKeys="true" keyProperty="dId">
+    insert into dir (name, create_time,
+      parent)
+    values (#{name,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+      #{parent,jdbcType=INTEGER})
+  </insert>
+
+  <insert id="insertSelective" parameterType="com.campusCloudStorage.entity.Dir">
+    insert into dir
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="dId != null">
+        d_id,
+      </if>
+      <if test="name != null">
+        name,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="parent != null">
+        parent,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="dId != null">
+        #{dId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null">
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parent != null">
+        #{parent,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+
+  <update id="updateByPrimaryKeySelective" parameterType="com.campusCloudStorage.entity.Dir">
+    update dir
+    <set>
+      <if test="name != null">
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="parent != null">
+        parent = #{parent,jdbcType=INTEGER},
+      </if>
+    </set>
+    where d_id = #{dId,jdbcType=INTEGER}
+  </update>
+
+  <update id="updateByPrimaryKey" parameterType="com.campusCloudStorage.entity.Dir">
+    update dir
+    set name = #{name,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      parent = #{parent,jdbcType=INTEGER}
+    where d_id = #{dId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.campusCloudStorage.dao.GroupMemberDao">
+  <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.GroupMemberKey">
+    <id column="g_id" jdbcType="INTEGER" property="gId" />
+    <id column="u_id" jdbcType="INTEGER" property="uId" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.campusCloudStorage.entity.GroupMemberKey">
+    delete from group_member
+    where g_id = #{gId,jdbcType=INTEGER}
+      and u_id = #{uId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.campusCloudStorage.entity.GroupMemberKey">
+    insert into group_member (g_id, u_id)
+    values (#{gId,jdbcType=INTEGER}, #{uId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.campusCloudStorage.entity.GroupMemberKey">
+    insert into group_member
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="gId != null">
+        g_id,
+      </if>
+      <if test="uId != null">
+        u_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="gId != null">
+        #{gId,jdbcType=INTEGER},
+      </if>
+      <if test="uId != null">
+        #{uId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+</mapper>
