@@ -1,15 +1,16 @@
 package com.campusCloudStorage.dao;
 
 import com.campusCloudStorage.entity.UserFriend;
+import com.campusCloudStorage.entity.UserFriendKey;
 
-public interface UserFriendDao {
-    int deleteByPrimaryKey(Integer from);
+public interface UserFriendMapper {
+    int deleteByPrimaryKey(UserFriendKey key);
 
     int insert(UserFriend record);
 
     int insertSelective(UserFriend record);
 
-    UserFriend selectByPrimaryKey(Integer from);
+    UserFriend selectByPrimaryKey(UserFriendKey key);
 
     int updateByPrimaryKeySelective(UserFriend record);
 

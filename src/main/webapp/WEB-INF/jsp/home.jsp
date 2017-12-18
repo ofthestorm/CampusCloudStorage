@@ -7,6 +7,10 @@
 <body>
 
 <div class="container">
+    <form role="form" method="get" action="/user/">
+        <button type="submit" class="btn btn-default">注册</button>
+    </form>
+
     <div>${msg}</div>
     <div class="btn-group">
         <button class="btn btn-default" id="dir_create_form_open_btn">新建文件夹</button>
@@ -111,7 +115,6 @@
 
 <script type="text/javascript">
     $(function () {
-        var u_id = ${uId};
         var src_d_id;
 
         $('#dir_create_form').hide();

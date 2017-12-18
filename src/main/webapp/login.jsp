@@ -32,16 +32,11 @@
         <button type="submit" class="btn btn-default">登录</button>
     </form>
 
-    <form role="form" method="get" action="/account/restreg">
+    <form role="form" method="get" action="/account/register">
         <button type="submit" class="btn btn-default">注册</button>
     </form>
 </div>
 </body>
-
-<%--<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
-<script src="https://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>--%>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/js/jquery-3.2.1.min.js"></script>
 

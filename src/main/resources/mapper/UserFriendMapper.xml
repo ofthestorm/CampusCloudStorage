@@ -1,6 +1,73 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.campusCloudStorage.dao.UserFriendDao">
+<mapper namespace="com.campusCloudStorage.dao.UserFriendMapper">
+  <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.UserFriend">
+    <id column="from" jdbcType="INTEGER" property="from" />
+    <id column="to" jdbcType="INTEGER" property="to" />
+    <result column="permitted" jdbcType="TINYINT" property="permitted" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    from, to, permitted
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriendKey" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from user_friend
+    where from = #{from,jdbcType=INTEGER}
+      and to = #{to,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriendKey">
+    delete from user_friend
+    where from = #{from,jdbcType=INTEGER}
+      and to = #{to,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.campusCloudStorage.entity.UserFriend">
+    insert into user_friend (from, to, permitted
+      )
+    values (#{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}, #{permitted,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.campusCloudStorage.entity.UserFriend">
+    insert into user_friend
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="from != null">
+        from,
+      </if>
+      <if test="to != null">
+        to,
+      </if>
+      <if test="permitted != null">
+        permitted,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="from != null">
+        #{from,jdbcType=INTEGER},
+      </if>
+      <if test="to != null">
+        #{to,jdbcType=INTEGER},
+      </if>
+      <if test="permitted != null">
+        #{permitted,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.campusCloudStorage.entity.UserFriend">
+    update user_friend
+    <set>
+      <if test="permitted != null">
+        permitted = #{permitted,jdbcType=TINYINT},
+      </if>
+    </set>
+    where from = #{from,jdbcType=INTEGER}
+      and to = #{to,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriend">
+    update user_friend
+    set permitted = #{permitted,jdbcType=TINYINT}
+    where from = #{from,jdbcType=INTEGER}
+      and to = #{to,jdbcType=INTEGER}
+  </update>
   <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.UserFriend">
     <id column="from" jdbcType="INTEGER" property="from" />
     <result column="to" jdbcType="INTEGER" property="to" />
