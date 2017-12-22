@@ -7,8 +7,11 @@
 <body>
 
 <div class="container">
-    <form role="form" method="get" action="/user/">
-        <button type="submit" class="btn btn-default">注册</button>
+    <form role="form" method="post" action="/friend/${uId}">
+        <button type="submit" class="btn btn-default">好友</button>
+    </form>
+    <form role="form" method="post" action="/group/${uId}">
+        <button type="submit" class="btn btn-default">群组</button>
     </form>
 
     <div>${msg}</div>
@@ -45,6 +48,30 @@
         <h3>选择移入文件夹</h3>
         <ul class="list-group" id="dir_move_list">
         </ul>
+    </form>
+
+    <form id="friend_share_form" role="form" method="post">
+        <h3>选择好友</h3>
+        <select class="form-control" id="friend_id_select" name="friendId">
+            <c:forEach var="friend" items="${friendList}">
+                <option value="${friend.uId}">(${friend.uId}) ${friend.name}</option>
+            </c:forEach>
+        </select>
+        <input class="form-control" name="remark" placeholder="请输入备注">
+        <button type="button" id="friend_share_btn" class="btn btn-default">分享</button>
+        <button type="button" id="friend_share_form_close_btn" class="btn btn-default">取消</button>
+    </form>
+
+    <form id="group_share_form" role="form" method="post">
+        <h3>选择群组</h3>
+        <select class="form-control" id="group_id_select" name="gId">
+            <c:forEach var="group" items="${groupList}">
+                <option value="${group.gId}">(${group.gId}) ${group.name}</option>
+            </c:forEach>
+        </select>
+        <input class="form-control" name="remark" placeholder="请输入备注">
+        <button type="button" id="group_share_btn" class="btn btn-default">分享</button>
+        <button type="button" id="group_share_form_close_btn" class="btn btn-default">取消</button>
     </form>
 
 
@@ -84,6 +111,7 @@
         <caption>文件</caption>
         <thead>
         <tr>
+            <th>文件ID</th>
             <th>文件名</th>
             <th>大小</th>
             <th>上传日期</th>
@@ -93,6 +121,7 @@
         <tbody>
         <c:forEach var="file" items="${fileHeaderList}">
             <tr>
+                <td>${file.fId}</td>
                 <td>${file.name}</td>
                 <td>${file.size}</td>
                 <td>${file.submitTime}</td>
@@ -100,6 +129,8 @@
                     <div class="btn-group">
                         <button class="btn btn-default file_delete_btn" f_id="${file.fId}">删除</button>
                         <button class="btn btn-default file_download_btn" f_id="${file.fId}">下载</button>
+                        <button class="btn btn-default friend_share_form_open_btn" f_id="${file.fId}">分享给好友</button>
+                        <button class="btn btn-default group_share_form_open_btn" f_id="${file.fId}">分享到群组</button>
                     </div>
                 </td>
             </tr>
@@ -121,9 +152,10 @@
         $('#dir_rename_form').hide();
         $('#dir_move_form').hide();
         $('#file_upload_form').hide();
+        $('#friend_share_form').hide();
+        $('#group_share_form').hide();
 
         //上传文件
-
         $('#file_upload_form_open_btn').click(function () {
             $('#file_upload_form').show();
             $(this).hide();
@@ -135,7 +167,6 @@
         })
 
         //下载文件
-
         $('.file_download_btn').click(function () {
             var f_id=$(this).attr('f_id');
             var action='/file/' + f_id + '/download' ;
@@ -156,7 +187,6 @@
         })
 
         //删除文件
-
         $('.file_delete_btn').click(function () {
             var f_id=$(this).attr('f_id');
             var action='/file/' + f_id + '/delete' ;
@@ -174,7 +204,6 @@
             form.remove();
             return false;
         })
-
 
         //新建文件夹
         $('#dir_create_form_open_btn').click(function () {
@@ -245,7 +274,6 @@
             form.remove();
             return false;
         })
-
 
         //重命名
         $('.dir_rename_form_open_btn').click(function () {
@@ -325,6 +353,57 @@
             $("#dir_move_form").submit();
         })
 
+        //分享朋友
+        $('.friend_share_form_open_btn').click(function () {
+            $('#friend_share_form').show();
+            $('#friend_share_form').attr('f_id',$(this).attr('f_id'));
+            $(this).hide();
+        })
+
+        $('#friend_share_form_close_btn').click(function () {
+            $('#friend_share_form').hide();
+            $('.friend_share_form_open_btn').show();
+        })
+
+        $('#friend_share_btn').click(function () {
+            var friend_id=$('#friend_id_select').val();
+            if(isNaN(friend_id)){
+                alert("请选择一个好友！");
+                return false;
+            }
+            var f_id = $('#friend_share_form').attr('f_id');
+            var action = '/file/${uId}/' + friend_id + '/' + f_id + '/friendshare';
+            $('#friend_share_form').attr('action',action);
+
+            $('#friend_share_form').submit();
+            return false;
+        })
+
+        //分享至群组
+        $('.group_share_form_open_btn').click(function () {
+            $('#group_share_form').show();
+            $('#group_share_form').attr('f_id',$(this).attr('f_id'));
+            $(this).hide();
+        })
+
+        $('#group_share_form_close_btn').click(function () {
+            $('#group_share_form').hide();
+            $('.group_share_form_open_btn').show();
+        })
+
+        $('#group_share_btn').click(function () {
+            var g_id=$('#group_id_select').val();
+            if(isNaN(g_id)){
+                alert("请选择一个群组！");
+                return false;
+            }
+            var f_id = $('#group_share_form').attr('f_id');
+            var action = '/group/${uId}/' + g_id + '/' + f_id + '/groupshare';
+            $('#friend_share_form').attr('action',action);
+
+            $('#friend_share_form').submit();
+            return false;
+        })
     })
 
 </script>

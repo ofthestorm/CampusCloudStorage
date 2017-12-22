@@ -1,23 +1,31 @@
 package com.campusCloudStorage.entity;
 
 public class UserFriendKey {
-    private Integer from;
+    private Integer fromId;
 
-    private Integer to;
+    private Integer toId;
 
-    public Integer getFrom() {
-        return from;
+    public UserFriendKey() {
     }
 
-    public void setFrom(Integer from) {
-        this.from = from;
+    public UserFriendKey(Integer fromId, Integer toId) {
+        this.fromId = fromId;
+        this.toId = toId;
     }
 
-    public Integer getTo() {
-        return to;
+    public Integer getFromId() {
+        return fromId;
     }
 
-    public void setTo(Integer to) {
-        this.to = to;
+    public void setFromId(Integer fromId) {
+        this.fromId = fromId;
+    }
+
+    public Integer getToId() {
+        return toId;
+    }
+
+    public void setToId(Integer toId) {
+        this.toId = toId;
     }
 }

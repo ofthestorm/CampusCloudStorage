@@ -1,13 +1,13 @@
 package com.campusCloudStorage.web;
 
-import com.campusCloudStorage.entity.Dir;
-import com.campusCloudStorage.entity.FileHeader;
-import com.campusCloudStorage.entity.User;
+import com.campusCloudStorage.entity.*;
 import com.campusCloudStorage.enums.CreateStateEnum;
 import com.campusCloudStorage.enums.DeleteStateEnum;
 import com.campusCloudStorage.enums.LoginStateEnum;
 import com.campusCloudStorage.enums.UpdateStateEnum;
 import com.campusCloudStorage.service.DirService;
+import com.campusCloudStorage.service.UserFriendService;
+import com.campusCloudStorage.service.UserGroupService;
 import com.campusCloudStorage.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -34,6 +34,12 @@ public class HomeController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private UserFriendService userFriendService;
+
+    @Autowired
+    private UserGroupService userGroupService;
+
     @RequestMapping(value="/{dId}",method= RequestMethod.POST)
     public String list(@PathVariable("dId")int dId, HttpServletRequest request, Model model) {
         HttpSession session=request.getSession();
@@ -47,22 +53,28 @@ public class HomeController {
         User user=userService.selectByPrimaryKey(uId);
         List<Dir> moveList=dirService.getFirstChildrenDirList(user.getRootDir());
 
+        List<User> friendList=userFriendService.selectPermittedFriendsByUId(uId);
+        List<UserGroup> groupList=userGroupService.selectOwnedAndJoinedGroups(uId);
+
+        model.addAttribute("uId",uId);
 
         model.addAttribute("currentDir",dId);
         model.addAttribute("rootDir",user.getRootDir());
         model.addAttribute("moveBackDir",user.getRootDir());
-        model.addAttribute("uId",uId);
+
+        model.addAttribute("friendList",friendList);
         model.addAttribute("dirList",dirList);
         model.addAttribute("fileHeaderList",fileHeaderList);
         model.addAttribute("pathList",pathList);
         model.addAttribute("moveList",moveList);
+        model.addAttribute("groupList",groupList);
 
         session.setAttribute("currentDir",dId);
         return "home";
     }
 
     @RequestMapping(value="/{dId}/dir/add",method= RequestMethod.POST)
-    public String addDir(@PathVariable("dId")int dId, Dir dir, HttpServletRequest request, RedirectAttributesModelMap modelMap) {
+    public String addDir(@PathVariable("dId")int dId, Dir dir, RedirectAttributesModelMap modelMap) {
         dir.setParent(dId);
         CreateStateEnum createState=dirService.createDir(dir);
         modelMap.addFlashAttribute("msg",createState.getStateInfo());

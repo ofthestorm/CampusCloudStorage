@@ -1,28 +1,26 @@
 package com.campusCloudStorage.web;
 
+
+import com.campusCloudStorage.dto.FriendFileShareItem;
 import com.campusCloudStorage.entity.FileHeader;
+import com.campusCloudStorage.enums.ShareStateEnum;
 import com.campusCloudStorage.service.FileHeaderService;
-import com.hadoop.HdfsFileSystem;
-import org.apache.commons.fileupload.disk.DiskFileItem;
+import com.campusCloudStorage.service.UserFileShareService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.MultipartHttpServletRequest;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import javax.ws.rs.POST;
 import java.io.*;
 import java.net.URLEncoder;
 import java.util.Date;
-import java.util.Iterator;
+import java.util.List;
 
 @RequestMapping("file")
 @Controller
@@ -30,6 +28,9 @@ public class FileController {
 
     @Resource
     private FileHeaderService fileHeaderService;
+
+    @Resource
+    private UserFileShareService userFileShareService;
 
     @RequestMapping(value="/upload",method= RequestMethod.POST)
     public String fileUpload(MultipartFile file, HttpServletRequest request) throws IOException {
@@ -86,5 +87,40 @@ public class FileController {
         int currentDir = (int)session.getAttribute("currentDir");
         fileHeaderService.deleteByPrimaryKey(fId);
         return "forward:/home/"+currentDir;
+    }
+
+    @RequestMapping(value="/{uId}/{friendId}/friendshare",method = RequestMethod.POST)
+    public String friendSharePage(@PathVariable("uId") int uId, @PathVariable("friendId") int friendId, HttpServletRequest request, Model model){
+        List<FriendFileShareItem> mySharedList=userFileShareService.selectSharedFilesByUId(uId,friendId);
+        List<FriendFileShareItem> friendSharedList=userFileShareService.selectSharedFilesByUId(friendId,uId);
+
+        model.addAttribute("uId",uId);
+        model.addAttribute("friendId",friendId);
+        model.addAttribute("mySharedList",mySharedList);
+        model.addAttribute("friendSharedList",friendSharedList);
+
+        return "friendshare";
+    }
+
+    @RequestMapping(value="/{uId}/{friendId}/{fId}/friendshare",method = RequestMethod.POST)
+    public String addFriendShareFile(@PathVariable("uId") int uId, @PathVariable("friendId") int friendId,@PathVariable("fId") int fId, String remark, HttpServletRequest request, Model model){
+        ShareStateEnum shareState=userFileShareService.insertByPrimaryKey(uId,friendId,fId,remark);
+
+        model.addAttribute("msg",shareState.getStateInfo());
+        HttpSession session=request.getSession();
+        int currentDir=(int)session.getAttribute("currentDir");
+
+        return "forward:/home/"+currentDir;
+    }
+
+    @RequestMapping(value="/{uId}/{friendId}/{fId}/deletefriendshare",method = RequestMethod.POST)
+    public String deleteFriendShareFile(@PathVariable("uId") int uId, @PathVariable("friendId") int friendId,@PathVariable("fId") int fId, HttpServletRequest request, Model model){
+        userFileShareService.deleteByPrimaryKey(uId,friendId,fId);
+
+        HttpSession session=request.getSession();
+        int currentDir=(int)session.getAttribute("currentDir");
+
+        model.addAttribute("msg","取消成功");
+        return "forward:/file/"+uId+"/"+friendId+"/friendshare";
     }
 }

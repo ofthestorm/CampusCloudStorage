@@ -3,6 +3,8 @@ package com.campusCloudStorage.dao;
 import com.campusCloudStorage.entity.UserFileShare;
 import com.campusCloudStorage.entity.UserFileShareKey;
 
+import java.util.List;
+
 public interface UserFileShareDao {
     int deleteByPrimaryKey(UserFileShareKey key);
 
@@ -17,4 +19,6 @@ public interface UserFileShareDao {
     int updateByPrimaryKeySelective(UserFileShare record);
 
     int updateByPrimaryKey(UserFileShare record);
+
+    List<UserFileShare> selectByUId(int fromId, int toId);
 }

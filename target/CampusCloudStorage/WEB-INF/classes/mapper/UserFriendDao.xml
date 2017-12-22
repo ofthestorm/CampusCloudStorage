@@ -2,48 +2,70 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.campusCloudStorage.dao.UserFriendDao">
   <resultMap id="BaseResultMap" type="com.campusCloudStorage.entity.UserFriend">
-    <id column="from" jdbcType="INTEGER" property="from" />
-    <result column="to" jdbcType="INTEGER" property="to" />
+    <id column="from_id" jdbcType="INTEGER" property="fromId" />
+    <id column="to_id" jdbcType="INTEGER" property="toId" />
     <result column="permitted" jdbcType="TINYINT" property="permitted" />
   </resultMap>
   <sql id="Base_Column_List">
-    from, to, permitted
+    from_id, to_id, permitted
   </sql>
-  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  <select id="selectByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriendKey" resultMap="BaseResultMap">
     select 
     <include refid="Base_Column_List" />
     from user_friend
-    where from = #{from,jdbcType=INTEGER}
+    where from_id = #{fromId,jdbcType=INTEGER}
+      and to_id = #{toId,jdbcType=INTEGER}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+  <select id="selectUnpermittedFriends" parameterType="integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_friend
+    where from_id = #{uId,jdbcType=INTEGER}
+      and permitted = 0
+  </select>
+  <select id="selectFriendRequests" parameterType="integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_friend
+    where to_id = #{uId,jdbcType=INTEGER}
+    and permitted = 0
+  </select>
+  <select id="selectFriends" parameterType="integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from user_friend
+    where permitted=1 and (from_id = #{uId,jdbcType=INTEGER} or user_friend.to_id = #{uId,jdbcType=INTEGER})
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriendKey">
     delete from user_friend
-    where from = #{from,jdbcType=INTEGER}
+    where from_id = #{fromId,jdbcType=INTEGER}
+      and to_id = #{toId,jdbcType=INTEGER}
   </delete>
   <insert id="insert" parameterType="com.campusCloudStorage.entity.UserFriend">
-    insert into user_friend (from, to, permitted
+    insert ignore into user_friend (from_id, to_id, permitted
       )
-    values (#{from,jdbcType=INTEGER}, #{to,jdbcType=INTEGER}, #{permitted,jdbcType=TINYINT}
+    values (#{fromId,jdbcType=INTEGER}, #{toId,jdbcType=INTEGER}, #{permitted,jdbcType=TINYINT}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.campusCloudStorage.entity.UserFriend">
     insert into user_friend
     <trim prefix="(" suffix=")" suffixOverrides=",">
-      <if test="from != null">
-        from,
+      <if test="fromId != null">
+        from_id,
       </if>
-      <if test="to != null">
-        to,
+      <if test="toId != null">
+        to_id,
       </if>
       <if test="permitted != null">
         permitted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
-      <if test="from != null">
-        #{from,jdbcType=INTEGER},
+      <if test="fromId != null">
+        #{from_id,jdbcType=INTEGER},
       </if>
-      <if test="to != null">
-        #{to,jdbcType=INTEGER},
+      <if test="toId != null">
+        #{to_id,jdbcType=INTEGER},
       </if>
       <if test="permitted != null">
         #{permitted,jdbcType=TINYINT},
@@ -53,19 +75,17 @@
   <update id="updateByPrimaryKeySelective" parameterType="com.campusCloudStorage.entity.UserFriend">
     update user_friend
     <set>
-      <if test="to != null">
-        to = #{to,jdbcType=INTEGER},
-      </if>
       <if test="permitted != null">
         permitted = #{permitted,jdbcType=TINYINT},
       </if>
     </set>
-    where from = #{from,jdbcType=INTEGER}
+    where from_id = #{fromId,jdbcType=INTEGER}
+      and to_id = #{toId,jdbcType=INTEGER}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.campusCloudStorage.entity.UserFriend">
     update user_friend
-    set to = #{to,jdbcType=INTEGER},
-      permitted = #{permitted,jdbcType=TINYINT}
-    where from = #{from,jdbcType=INTEGER}
+    set permitted = #{permitted,jdbcType=TINYINT}
+    where from_id = #{fromId,jdbcType=INTEGER}
+      and to_id = #{toId,jdbcType=INTEGER}
   </update>
 </mapper>

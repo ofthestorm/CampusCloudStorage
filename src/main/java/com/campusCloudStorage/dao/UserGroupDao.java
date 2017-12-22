@@ -2,6 +2,8 @@ package com.campusCloudStorage.dao;
 
 import com.campusCloudStorage.entity.UserGroup;
 
+import java.util.List;
+
 public interface UserGroupDao {
     int deleteByPrimaryKey(Integer gId);
 
@@ -10,6 +12,8 @@ public interface UserGroupDao {
     int insertSelective(UserGroup record);
 
     UserGroup selectByPrimaryKey(Integer gId);
+
+    List<UserGroup> selectByBuilderId(Integer builderId);
 
     int updateByPrimaryKeySelective(UserGroup record);
 

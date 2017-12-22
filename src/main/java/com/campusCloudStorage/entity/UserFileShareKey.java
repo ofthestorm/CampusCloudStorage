@@ -1,16 +1,26 @@
 package com.campusCloudStorage.entity;
 
 public class UserFileShareKey {
-    private Integer uId;
+    private Integer fromId;
+
+    private Integer toId;
 
     private Integer fId;
 
-    public Integer getuId() {
-        return uId;
+    public Integer getFromId() {
+        return fromId;
     }
 
-    public void setuId(Integer uId) {
-        this.uId = uId;
+    public void setFromId(Integer fromId) {
+        this.fromId = fromId;
+    }
+
+    public Integer getToId() {
+        return toId;
+    }
+
+    public void setToId(Integer toId) {
+        this.toId = toId;
     }
 
     public Integer getfId() {

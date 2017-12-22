@@ -57,7 +57,6 @@ public class FileHeaderServiceImpl implements FileHeaderService{
             file.delete();
         }
 
-
         userFileShareDao.deleteByFId(fId);
         int deleteCount=fileHeaderDao.deleteByPrimaryKey(fId);
         if(deleteCount==1){
