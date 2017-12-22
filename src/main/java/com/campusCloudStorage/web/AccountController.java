@@ -41,6 +41,8 @@ public class AccountController {
 
         HttpSession session=request.getSession();
         session.setAttribute("uId",uId);
+        session.setAttribute("rootDir",userFromDB.getRootDir());
+        session.setAttribute("recyclebin",userFromDB.getRecyclebin());
         modelMap.addFlashAttribute("uId",uId);
         attributes.addFlashAttribute("uId",uId);
         return "forward:/home/"+rootDir;

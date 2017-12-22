@@ -6,6 +6,19 @@
 </head>
 <body>
 <div class="container">
+    <form role="form" method="post" action="/home/${rootDir}">
+        <button type="submit" class="btn btn-default">首页</button>
+    </form>
+    <form role="form" method="post" action="/friend/${uId}">
+        <button type="submit" class="btn btn-default">好友</button>
+    </form>
+    <form role="form" method="post" action="/group/${uId}">
+        <button type="submit" class="btn btn-default">群组</button>
+    </form>
+    <form role="form" method="post" action="/recyclebin/${recyclebin}">
+        <button type="submit" class="btn btn-default">回收站</button>
+    </form>
+
     <div>${msg}</div>
 
 

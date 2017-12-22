@@ -7,11 +7,17 @@
 <body>
 
 <div class="container">
+    <form role="form" method="post" action="/home/${rootDir}">
+        <button type="submit" class="btn btn-default">首页</button>
+    </form>
     <form role="form" method="post" action="/friend/${uId}">
         <button type="submit" class="btn btn-default">好友</button>
     </form>
     <form role="form" method="post" action="/group/${uId}">
         <button type="submit" class="btn btn-default">群组</button>
+    </form>
+    <form role="form" method="post" action="/recyclebin/${recyclebin}">
+        <button type="submit" class="btn btn-default">回收站</button>
     </form>
 
     <div>${msg}</div>
@@ -47,6 +53,12 @@
     <form id="dir_move_form" role="form" method="post">
         <h3>选择移入文件夹</h3>
         <ul class="list-group" id="dir_move_list">
+        </ul>
+    </form>
+
+    <form id="file_move_form" role="form" method="post">
+        <h3>选择移入文件夹</h3>
+        <ul class="list-group" id="file_move_list">
         </ul>
     </form>
 
@@ -99,7 +111,7 @@
                         <button class="btn btn-default dir_open_btn" d_id="${dir.dId}">打开</button>
                         <button class="btn btn-default dir_rename_form_open_btn" d_id="${dir.dId}" name="${dir.name}">重命名</button>
                         <button class="btn btn-default dir_move_form_open_btn" d_id="${dir.dId}">移动至</button>
-                        <button class="btn btn-default dir_delete_btn" d_id="${dir.dId}">删除</button>
+                        <button class="btn btn-default dir_remove_btn" d_id="${dir.dId}">删除</button>
                     </div>
                 </td>
             </tr>
@@ -127,8 +139,9 @@
                 <td>${file.submitTime}</td>
                 <td>
                     <div class="btn-group">
-                        <button class="btn btn-default file_delete_btn" f_id="${file.fId}">删除</button>
+                        <button class="btn btn-default file_remove_btn" f_id="${file.fId}">删除</button>
                         <button class="btn btn-default file_download_btn" f_id="${file.fId}">下载</button>
+                        <button class="btn btn-default file_move_form_open_btn" f_id="${file.fId}">移动至</button>
                         <button class="btn btn-default friend_share_form_open_btn" f_id="${file.fId}">分享给好友</button>
                         <button class="btn btn-default group_share_form_open_btn" f_id="${file.fId}">分享到群组</button>
                     </div>
@@ -147,10 +160,12 @@
 <script type="text/javascript">
     $(function () {
         var src_d_id;
+        var src_f_id;
 
         $('#dir_create_form').hide();
         $('#dir_rename_form').hide();
         $('#dir_move_form').hide();
+        $('#file_move_form').hide();
         $('#file_upload_form').hide();
         $('#friend_share_form').hide();
         $('#group_share_form').hide();
@@ -187,9 +202,9 @@
         })
 
         //删除文件
-        $('.file_delete_btn').click(function () {
+        $('.file_remove_btn').click(function () {
             var f_id=$(this).attr('f_id');
-            var action='/file/' + f_id + '/delete' ;
+            var action='/file/' + f_id + '/remove' ;
             var form = $('<form></form>');
 
             form.attr('action', action);
@@ -217,9 +232,9 @@
         })
 
         //删除文件夹
-        $('.dir_delete_btn').click(function () {
+        $('.dir_remove_btn').click(function () {
             var d_id=$(this).attr('d_id');
-            var action='/home/' + d_id + '/dir/delete' ;
+            var action='/home/' + d_id + '/dir/remove' ;
             var form = $('<form></form>');
 
             form.attr('action', action);
@@ -299,8 +314,9 @@
             var htmlobj=$.ajax({
                 url:"/home/"+src_d_id+"/dir/${rootDir}/enter",
                 data:{
-                    srcDId:src_d_id,
-                    dId:${rootDir}
+                    srcId:src_d_id,
+                    dId:${rootDir},
+                    moveType:"dir"
                 },
                 async:false,
                 dataType: "text",
@@ -316,7 +332,8 @@
                 url:"/home/"+src_d_id+"/dir/"+$(this).attr("d_id")+"/enter",
                 data:{
                     srcDId:src_d_id,
-                    dId:$(this).attr("d_id")
+                    dId:$(this).attr("d_id"),
+                    moveType:"dir"
                 },
                 async:false,
                 dataType: "text",
@@ -336,7 +353,8 @@
                 url:"/home/"+src_d_id+"/dir/"+$(this).attr("d_id")+"/enter",
                 data:{
                     srcDId:src_d_id,
-                    dId:$(this).attr("d_id")
+                    dId:$(this).attr("d_id"),
+                    moveType:"dir"
                 },
                 async:false,
                 dataType: "text",
@@ -351,6 +369,73 @@
             var action = $("#dir_move_form").attr("action")+parentId+"/move";
             $("#dir_move_form").attr("action",action);
             $("#dir_move_form").submit();
+        })
+
+        //移动文件 ajax
+        $('.file_move_form_open_btn').click(function () {
+            src_f_id = $(this).attr('f_id');
+            var action="/home/"+src_f_id+"/file/";
+            $('#file_move_form').attr("action",action);
+            $('#file_move_form').show();
+
+            var htmlobj=$.ajax({
+                url:"/home/"+src_f_id+"/dir/${rootDir}/enter",
+                data:{
+                    srcId:src_f_id,
+                    dId:${rootDir},
+                    moveType:"file"
+                },
+                async:false,
+                dataType: "text",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                type:"POST"
+            });
+            $("#file_move_list").html(htmlobj.responseText);
+            $(this).hide();
+        })
+
+        $(document).delegate('.file_move_enter_btn','click',function () {
+            var htmlobj=$.ajax({
+                url:"/home/"+src_f_id+"/dir/"+$(this).attr("d_id")+"/enter",
+                data:{
+                    srcId:src_f_id,
+                    dId:$(this).attr("d_id"),
+                    moveType:"file"
+                },
+                async:false,
+                dataType: "text",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                type:"POST"
+            });
+            $("#file_move_list").html(htmlobj.responseText);
+        })
+
+        $(document).delegate('#file_move_form_close_btn','click',function () {
+            $('#file_move_form').hide();
+            $('.file_move_form_open_btn').show();
+        })
+
+        $(document).delegate('#file_move_back_btn','click',function () {
+            var htmlobj=$.ajax({
+                url:"/home/"+src_d_id+"/dir/"+$(this).attr("d_id")+"/enter",
+                data:{
+                    srcDId:src_d_id,
+                    dId:$(this).attr("d_id"),
+                    moveType:"file"
+                },
+                async:false,
+                dataType: "text",
+                contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+                type:"POST"
+            });
+            $("#dir_move_list").html(htmlobj.responseText);
+        })
+
+        $(document).delegate('#file_move_btn','click',function () {
+            var parentId = $(this).attr("d_id");
+            var action = $("#file_move_form").attr("action")+parentId+"/move";
+            $("#file_move_form").attr("action",action);
+            $("#file_move_form").submit();
         })
 
         //分享朋友

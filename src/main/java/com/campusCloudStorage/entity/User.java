@@ -9,6 +9,8 @@ public class User {
 
     private Integer rootDir;
 
+    private Integer recyclebin;
+
     private String type;
 
     public Integer getuId() {
@@ -41,6 +43,14 @@ public class User {
 
     public void setRootDir(Integer rootDir) {
         this.rootDir = rootDir;
+    }
+
+    public Integer getRecyclebin() {
+        return recyclebin;
+    }
+
+    public void setRecyclebin(Integer recyclebin) {
+        this.recyclebin = recyclebin;
     }
 
     public String getType() {

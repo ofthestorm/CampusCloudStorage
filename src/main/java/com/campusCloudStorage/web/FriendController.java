@@ -13,6 +13,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.mvc.support.RedirectAttributesModelMap;
 
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 
@@ -27,12 +29,18 @@ public class FriendController {
     private UserFriendService userFriendService;
 
     @RequestMapping(value="/{uId}",method= RequestMethod.POST)
-    public String list(@PathVariable("uId") int uId, Model model) {
+    public String list(@PathVariable("uId") int uId, HttpServletRequest request, Model model) {
+        HttpSession session=request.getSession();
+        int rootDir=(int)session.getAttribute("rootDir");
+        int recyclebin=(int)session.getAttribute("recyclebin");
+
         List<User>friendList=userFriendService.selectPermittedFriendsByUId(uId);
         List<User>unpermittedFriendList=userFriendService.selectFriendRequestByUId(uId);
 
 
         model.addAttribute("uId",uId);
+        model.addAttribute("rootDir",rootDir);
+        model.addAttribute("recyclebin",recyclebin);
         model.addAttribute("friendList",friendList);
         model.addAttribute("unpermittedFriendList",unpermittedFriendList);
 

@@ -2,6 +2,7 @@ package com.campusCloudStorage.web;
 
 
 import com.campusCloudStorage.dto.FriendFileShareItem;
+import com.campusCloudStorage.entity.Dir;
 import com.campusCloudStorage.entity.FileHeader;
 import com.campusCloudStorage.enums.ShareStateEnum;
 import com.campusCloudStorage.service.FileHeaderService;
@@ -80,21 +81,39 @@ public class FileController {
         out.close();
     }
 
+    @RequestMapping(value="/{fId}/remove",method = RequestMethod.POST)
+    public String fileRemove(@PathVariable("fId") int fId, HttpServletRequest request){
+        HttpSession session=request.getSession();
+        int recyclebin=(int)session.getAttribute("recyclebin");
+
+        FileHeader fileHeader= fileHeaderService.selectByPrimaryKey(fId);
+        fileHeader.setParent(recyclebin);
+        fileHeaderService.update(fileHeader);
+
+        int currentDir = (int)session.getAttribute("currentDir");
+        return "forward:/home/"+currentDir;
+    }
 
     @RequestMapping(value="/{fId}/delete",method = RequestMethod.POST)
     public String fileDelete(@PathVariable("fId") int fId, HttpServletRequest request){
         HttpSession session=request.getSession();
         int currentDir = (int)session.getAttribute("currentDir");
         fileHeaderService.deleteByPrimaryKey(fId);
-        return "forward:/home/"+currentDir;
+        return "forward:/recyclebin/"+currentDir;
     }
 
     @RequestMapping(value="/{uId}/{friendId}/friendshare",method = RequestMethod.POST)
     public String friendSharePage(@PathVariable("uId") int uId, @PathVariable("friendId") int friendId, HttpServletRequest request, Model model){
+        HttpSession session=request.getSession();
+        int rootDir=(int)session.getAttribute("rootDir");
+        int recyclebin=(int)session.getAttribute("recyclebin");
+
         List<FriendFileShareItem> mySharedList=userFileShareService.selectSharedFilesByUId(uId,friendId);
         List<FriendFileShareItem> friendSharedList=userFileShareService.selectSharedFilesByUId(friendId,uId);
 
         model.addAttribute("uId",uId);
+        model.addAttribute("rootDir",rootDir);
+        model.addAttribute("recyclebin",recyclebin);
         model.addAttribute("friendId",friendId);
         model.addAttribute("mySharedList",mySharedList);
         model.addAttribute("friendSharedList",friendSharedList);

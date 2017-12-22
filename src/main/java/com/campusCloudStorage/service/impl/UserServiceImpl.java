@@ -47,6 +47,12 @@ public class UserServiceImpl implements UserService{
         dirDao.insert(rootDir);
         user.setRootDir(rootDir.getdId());
 
+        Dir recyclebin=new Dir();
+        recyclebin.setCreateTime(new Date());
+        recyclebin.setName("recyclebin");
+        dirDao.insert(recyclebin);
+        user.setRecyclebin(recyclebin.getdId());
+
         int insertCount = userDao.insertSelective(user);
         if(insertCount==1){
 

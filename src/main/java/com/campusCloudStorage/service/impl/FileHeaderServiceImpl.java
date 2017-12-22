@@ -6,6 +6,7 @@ import com.campusCloudStorage.dao.UserFileShareDao;
 import com.campusCloudStorage.entity.FileHeader;
 import com.campusCloudStorage.enums.CreateStateEnum;
 import com.campusCloudStorage.enums.DeleteStateEnum;
+import com.campusCloudStorage.enums.UpdateStateEnum;
 import com.campusCloudStorage.service.FileHeaderService;
 import org.springframework.stereotype.Service;
 
@@ -68,5 +69,17 @@ public class FileHeaderServiceImpl implements FileHeaderService{
     @Override
     public FileHeader selectByPrimaryKey(int fId) {
         return fileHeaderDao.selectByPrimaryKey(fId);
+    }
+
+    @Override
+    public UpdateStateEnum update(FileHeader fileHeader) {
+        if(fileHeader==null){
+            return UpdateStateEnum.FAILED;
+        }
+        int updateCount = fileHeaderDao.updateByPrimaryKey(fileHeader);
+        if(updateCount==1){
+            return UpdateStateEnum.SUCCESS;
+        }
+        return UpdateStateEnum.FAILED;
     }
 }

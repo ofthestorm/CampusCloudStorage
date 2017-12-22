@@ -35,18 +35,28 @@ public class GroupController {
     private GroupFileShareService groupFileShareService;
 
     @RequestMapping(value="/{uId}",method= RequestMethod.POST)
-    public String generalList(@PathVariable("uId") int uId, Model model) {
+    public String generalList(@PathVariable("uId") int uId, HttpServletRequest request, Model model) {
+        HttpSession session=request.getSession();
+        int rootDir=(int)session.getAttribute("rootDir");
+        int recyclebin=(int)session.getAttribute("recyclebin");
+
         List<UserGroup> ownedGroupList=userGroupService.selectOwnedGroups(uId);
         List<UserGroup> joinedGroupList=userGroupService.selectJoinedGroups(uId);
 
         model.addAttribute("uId",uId);
+        model.addAttribute("rootDir",rootDir);
+        model.addAttribute("recyclebin",recyclebin);
         model.addAttribute("ownedGroupList",ownedGroupList);
         model.addAttribute("joinedGroupList",joinedGroupList);
         return "group";
     }
 
     @RequestMapping(value="/{uId}/{gId}",method= RequestMethod.POST)
-    public String detailList(@PathVariable("uId") int uId, @PathVariable("gId") int gId, Model model) {
+    public String detailList(@PathVariable("uId") int uId, @PathVariable("gId") int gId, HttpServletRequest request, Model model) {
+        HttpSession session=request.getSession();
+        int rootDir=(int)session.getAttribute("rootDir");
+        int recyclebin=(int)session.getAttribute("recyclebin");
+
         User owner = userGroupService.selectOwner(gId);
         List<User> memberList=userGroupService.selectMembers(gId);
         List<GroupFileShareItem> groupFileShareList = groupFileShareService.selectSharedFilesByGId(gId);
@@ -55,6 +65,8 @@ public class GroupController {
         model.addAttribute("uId",uId);
         model.addAttribute("gId",gId);
         model.addAttribute("owner",owner);
+        model.addAttribute("rootDir",rootDir);
+        model.addAttribute("recyclebin",recyclebin);
 
         model.addAttribute("groupFileShareList",groupFileShareList);
         model.addAttribute("memberList",memberList);
