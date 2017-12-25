@@ -3,98 +3,155 @@
 <head>
     <title>主页</title>
     <%@include file="common/head.jsp"%>
+    <%@include file="common/navbar.jsp"%>
 </head>
 <body>
+<div class="container-fluid ">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <form role="form" id="form1" method="post" action="/home/${rootDir}">
+                    <li>
+                        <a href="#" onclick="$('#form1').submit();">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
+                            首页</a>
+                    </li>
+                </form>
+                <form role="form"  id="form2" method="post" action="/friend/${uId}">
+                    <li>
+                        <a href="#" onclick="$('#form2').submit();">
+                            <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                            好友</a>
+                    </li>
+                </form>
+                <form role="form"  id="form3" method="post" action="/group/${uId}">
+                    <li>
+                        <a href="#" onclick="$('#form3').submit();">
+                            <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
+                            群组</a>
+                    </li>
+                </form>
+                <form role="form"  id="form4" method="post" action="/recyclebin/${recyclebin}">
+                    <li  class="active">
+                        <a href="#" onclick="$('#form4').submit();">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
+                            回收站 <span class="sr-only">(current)</span></a>
+                    </li>
+                </form>
+            </ul>
+        </div>
 
-<div class="container">
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="container">
 
-    <div>${msg}</div>
-    <form role="form" method="post" action="/home/${rootDir}">
-        <button type="submit" class="btn btn-default">首页</button>
-    </form>
-    <form role="form" method="post" action="/friend/${uId}">
-        <button type="submit" class="btn btn-default">好友</button>
-    </form>
-    <form role="form" method="post" action="/group/${uId}">
-        <button type="submit" class="btn btn-default">群组</button>
-    </form>
-    <form role="form" method="post" action="/recyclebin/${recyclebin}">
-        <button type="submit" class="btn btn-default">回收站</button>
-    </form>
+                <div>${msg}</div>
 
-    <form id="dir_recover_form" role="form" method="post">
-        <h3>选择移入文件夹</h3>
-        <ul class="list-group" id="dir_move_list">
-        </ul>
-    </form>
 
-    <form id="file_recover_form" role="form" method="post">
-        <h3>选择移入文件夹</h3>
-        <ul class="list-group" id="file_move_list">
-        </ul>
-    </form>
 
-    <div>
-        当前路径:
-        <c:forEach var="dir" items="${pathList}">
-            <span class="path_span" d_id="${dir.dId}"> ${dir.name}> </span>
-        </c:forEach>
+
+
+                <div class="path">
+                    当前路径:
+                    <c:forEach var="dir" items="${pathList}">
+                        <span class="path_span" d_id="${dir.dId}"> ${dir.name}> </span>
+                    </c:forEach>
+                </div>
+
+                <table class="table   table-hover table-condensed">
+                    <caption>文件夹</caption>
+                    <thead>
+                    <tr>
+                        <th>文件夹名</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="dir" items="${dirList}">
+                        <tr>
+                            <td>${dir.name}</td>
+                            <td>
+                                <%--<div class="btn-group">--%>
+                                    <%--<button class="btn btn-default dir_open_btn" d_id="${dir.dId}">打开</button>--%>
+                                    <%--<button class="btn btn-default dir_recover_form_open_btn" d_id="${dir.dId}">恢复至</button>--%>
+                                    <%--<button class="btn btn-default dir_delete_btn" d_id="${dir.dId}">彻底删除</button>--%>
+                                <%--</div>--%>
+                                    <a class="dir_open_btn" d_id="${dir.dId}">打开</a>
+                                    <a class="dir_recover_form_open_btn" d_id="${dir.dId}"  data-toggle="modal" data-target="#bin-dir-recover-modal">恢复至</a>
+                                    <a class="dir_delete_btn" d_id="${dir.dId}">彻底删除</a>
+
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <div class="modal fade" id="bin-dir-recover-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <br/>
+                                <form id="dir_recover_form" role="form" method="post">
+                                    <h3>选择移入文件夹</h3>
+                                    <ul class="list-group" id="dir_move_list">
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table class="table   table-hover table-condensed" width="100%">
+                    <caption>文件</caption>
+                    <thead>
+                    <tr>
+                        <th>文件ID</th>
+                        <th>文件名</th>
+                        <th>大小</th>
+                        <th>上传日期</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <c:forEach var="file" items="${fileHeaderList}">
+                        <tr>
+                            <td width="10%">${file.fId}</td>
+                            <td width="20%">${file.name}</td>
+                            <td width="10%">${file.size}</td>
+                            <td width="20%">${file.submitTime}</td>
+                            <td width="40%">
+                                <%--<div class="btn-group">--%>
+                                    <%--<button class="btn btn-default file_delete_btn" f_id="${file.fId}">彻底删除</button>--%>
+                                    <%--<button class="btn btn-default file_recover_form_open_btn" f_id="${file.fId}">移动至</button>--%>
+                                <%--</div>--%>
+                                    <a class="file_delete_btn" f_id="${file.fId}">彻底删除</a>
+                                    <a class="file_recover_form_open_btn" f_id="${file.fId}" data-toggle="modal" data-target="#bin-file-recover-modal">恢复至</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    </tbody>
+                </table>
+                <div class="modal fade" id="bin-file-recover-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                <br/>
+
+                                <form id="file_recover_form" role="form" method="post">
+                                    <h3>选择移入文件夹</h3>
+                                    <ul class="list-group" id="file_move_list">
+                                    </ul>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    <table class="table">
-        <caption>文件夹</caption>
-        <thead>
-        <tr>
-            <th>文件夹名</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="dir" items="${dirList}">
-            <tr>
-                <td>${dir.name}</td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn btn-default dir_open_btn" d_id="${dir.dId}">打开</button>
-                        <button class="btn btn-default dir_recover_form_open_btn" d_id="${dir.dId}">恢复至</button>
-                        <button class="btn btn-default dir_delete_btn" d_id="${dir.dId}">彻底删除</button>
-                    </div>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
-    <table class="table">
-        <caption>文件</caption>
-        <thead>
-        <tr>
-            <th>文件ID</th>
-            <th>文件名</th>
-            <th>大小</th>
-            <th>上传日期</th>
-            <th>操作</th>
-        </tr>
-        </thead>
-        <tbody>
-        <c:forEach var="file" items="${fileHeaderList}">
-            <tr>
-                <td>${file.fId}</td>
-                <td>${file.name}</td>
-                <td>${file.size}</td>
-                <td>${file.submitTime}</td>
-                <td>
-                    <div class="btn-group">
-                        <button class="btn btn-default file_delete_btn" f_id="${file.fId}">彻底删除</button>
-                        <button class="btn btn-default file_recover_form_open_btn" f_id="${file.fId}">移动至</button>
-                    </div>
-                </td>
-            </tr>
-        </c:forEach>
-        </tbody>
-    </table>
-
 </div>
+
 
 </body>
 
@@ -209,7 +266,7 @@
                 type:"POST"
             });
             $("#dir_move_list").html(htmlobj.responseText);
-            $(this).hide();
+//            $(this).hide();
         })
 
         $(document).delegate('.dir_move_enter_btn','click',function () {
@@ -228,10 +285,10 @@
             $("#dir_move_list").html(htmlobj.responseText);
         })
 
-        $(document).delegate('#dir_recover_form_close_btn','click',function () {
-            $('#dir_recover_form').hide();
-            $('.dir_recover_form_open_btn').show();
-        })
+//        $(document).delegate('#dir_recover_form_close_btn','click',function () {
+//            $('#dir_recover_form').hide();
+//            $('.dir_recover_form_open_btn').show();
+//        })
 
         $(document).delegate('#dir_move_back_btn','click',function () {
             var htmlobj=$.ajax({
@@ -276,7 +333,7 @@
                 type:"POST"
             });
             $("#file_move_list").html(htmlobj.responseText);
-            $(this).hide();
+//            $(this).hide();
         })
 
         $(document).delegate('.file_move_enter_btn','click',function () {
@@ -296,8 +353,9 @@
         })
 
         $(document).delegate('#file_move_form_close_btn','click',function () {
-            $('#file_move_form').hide();
-            $('.file_recover_form_open_btn').show();
+//            $('#file_move_form').hide();
+//            $('.file_recover_form_open_btn').show();
+
         })
 
         $(document).delegate('#file_move_btn','click',function () {
@@ -309,9 +367,9 @@
 
         $(document).delegate('#file_move_back_btn','click',function () {
             var htmlobj=$.ajax({
-                url:"/home/"+src_d_id+"/dir/"+$(this).attr("d_id")+"/enter",
+                url:"/home/"+src_f_id+"/dir/"+$(this).attr("d_id")+"/enter",
                 data:{
-                    srcDId:src_d_id,
+                    srcId:src_f_id,
                     dId:$(this).attr("d_id"),
                     moveType:"file"
                 },
@@ -320,9 +378,8 @@
                 contentType: "application/x-www-form-urlencoded;charset=UTF-8",
                 type:"POST"
             });
-            $("#dir_move_list").html(htmlobj.responseText);
+            $("#file_move_list").html(htmlobj.responseText);
         })
-
     })
 
 </script>
