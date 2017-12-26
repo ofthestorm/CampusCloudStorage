@@ -8,16 +8,31 @@ body {
 .btn {
     border-radius: 15px;
 }
+.btn:focus,.btn:active {
+    outline: none !important;
+    box-shadow: none;
+}
 .btn-primary {
     background-color: #28BB9C;
     border-color: #28BB9C;
 }
 .btn-primary:hover {
     background-color: #74D3BF;
+    border-color: #74D3BF;
 }
 .btn-primary:focus {
     background-color: #74D3BF;
+    border-color: #74D3BF;
+    /*border-radius: 15px;*/
 }
+
+input:focus,input:active,input::selection,textarea::selection {
+    outline: none;
+    border-color: #cfdc00;
+    box-shadow: 0 0 5px rgba(207, 220, 0, 0.4);
+    border-radius: 5px;
+}
+
 h1 {
     color: #28BB9C;
 }
@@ -96,10 +111,11 @@ h1 {
 /*background-color: #C1C3C5;*/
 /*}*/
 
-.active-a {
+#active-a {
     color: #ffffff;
     background-color: #C1C3C5;
 }
+
 .main {
     padding: 10px;
     /*width: 75%;*/
@@ -163,10 +179,10 @@ h1 {
 /*}*/
 
 td > a {
-    color: #E54D42;
+    color: #C1C3C5;
 }
 td > a:hover {
-    color: #EDB2B9;
+    color: #F19B2C;
 }
 
 .return {

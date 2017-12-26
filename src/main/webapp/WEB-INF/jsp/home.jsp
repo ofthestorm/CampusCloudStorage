@@ -13,7 +13,7 @@
             <ul class="nav nav-sidebar">
                 <form role="form" id="form1" method="post" action="/home/${rootDir}">
                     <li class="active">
-                        <a class="active-a" href="#" onclick="$('#form1').submit();">
+                        <a id="active-a" href="#" onclick="$('#form1').submit();">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"></span>
                              首页 <span class="sr-only">(current)</span></a>
                     </li>
@@ -84,46 +84,28 @@
                         </form>
                     </div>
                 </div>
-                <%--<div class="btn-group">--%>
-                    <%--<button class="btn btn-default" id="dir_create_form_open_btn">新建文件夹</button>--%>
-                    <%--<button class="btn btn-default" id="file_upload_form_open_btn">上传文件</button>--%>
-                <%--</div>--%>
+
                 <div>${msg}</div>
 
-
-
-
-
-
-
-
-
                 <table class="table table-hover table-condensed" width="100%">
-                    <caption>文件夹</caption>
+                    <%--<caption>文件夹</caption>--%>
                     <thead>
                     <tr>
-                        <th>文件夹名</th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>大小</th>
+                        <th>创建/上传日期</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <%--<c:forEach var="dir" items="${dirList}">--%>
-                        <%--<tr>--%>
-                            <%--<td>${dir.name}</td>--%>
-                            <%--<td>--%>
-                                <%--<div class="btn-group">--%>
-                                    <%--<button class="btn btn-default dir_open_btn" d_id="${dir.dId}">打开</button>--%>
-                                    <%--<button class="btn btn-default dir_rename_form_open_btn" d_id="${dir.dId}" name="${dir.name}">重命名</button>--%>
-                                    <%--<button class="btn btn-default dir_move_form_open_btn" d_id="${dir.dId}">移动至</button>--%>
-                                    <%--<button class="btn btn-default dir_remove_btn" d_id="${dir.dId}">删除</button>--%>
-                                <%--</div>--%>
-                            <%--</td>--%>
-                        <%--</tr>--%>
-                    <%--</c:forEach>--%>
                     <c:forEach var="dir" items="${dirList}">
                         <tr>
-                            <td width="50%">${dir.name}</td>
-                            <td width="50%">
+                            <td>${dir.dId}</td>
+                            <td><span class="glyphicon glyphicon-folder-open" style="color: rgb(180,180,180);" aria-hidden="true"></span> ${dir.name}</td>
+                            <td>-</td>
+                            <td>${dir.createTime}</td>
+                            <td>
                                     <a class="dir_open_btn" d_id="${dir.dId}" >打开</a>
                                     <a class="dir_rename_form_open_btn" d_id="${dir.dId}" name="${dir.name}" data-toggle="modal" data-target="#home-dir-rename-modal">重命名</a>
                                     <a class="dir_move_form_open_btn" d_id="${dir.dId}" data-toggle="modal" data-target="#home-dir-move-modal">移动至</a>
@@ -131,8 +113,41 @@
                             </td>
                         </tr>
                     </c:forEach>
+                    <c:forEach var="file" items="${fileHeaderList}">
+                        <tr>
+                            <td width="5%">${file.fId}</td>
+                            <td width="25%"><span class="glyphicon glyphicon-file"  style="color: rgb(180,180,180);" aria-hidden="true"></span> ${file.name}</td>
+                            <td width="5%">${file.size}</td>
+                            <td width="25%">${file.submitTime}</td>
+                            <td width="40%">
+                                <a class="file_remove_btn" f_id="${file.fId}">删除</a>
+                                <a class="file_download_btn" f_id="${file.fId}">下载</a>
+                                <a class="file_move_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home-file-move-modal">移动至</a>
+                                <a class="friend_share_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home--file-friend-share-modal">分享给好友</a>
+                                <a class="group_share_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home-file-group-share-modal">分享到群组</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
                     </tbody>
                 </table>
+
+
+
+                <%--<table class="table table-hover table-condensed" width="100%">--%>
+                    <%--<caption>文件</caption>--%>
+                    <%--<thead>--%>
+                    <%--<tr>--%>
+                        <%--<th>文件ID</th>--%>
+                        <%--<th>文件名</th>--%>
+                        <%--<th>大小</th>--%>
+                        <%--<th>上传日期</th>--%>
+                        <%--<th>操作</th>--%>
+                    <%--</tr>--%>
+                    <%--</thead>--%>
+                    <%--<tbody>--%>
+                    <%----%>
+                    <%--</tbody>--%>
+                <%--</table>--%>
 
                 <div class="modal fade" id="home-dir-rename-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
@@ -168,44 +183,6 @@
                         </div>
                     </div>
                 </div>
-
-                <table class="table table-hover table-condensed" width="100%">
-                    <caption>文件</caption>
-                    <thead>
-                    <tr>
-                        <th>文件ID</th>
-                        <th>文件名</th>
-                        <th>大小</th>
-                        <th>上传日期</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="file" items="${fileHeaderList}">
-                        <tr>
-                            <td width="10%">${file.fId}</td>
-                            <td width="20%">${file.name}</td>
-                            <td width="10%">${file.size}</td>
-                            <td width="20%">${file.submitTime}</td>
-                            <td width="40%">
-                                    <a class="file_remove_btn" f_id="${file.fId}">删除</a>
-                                    <a class="file_download_btn" f_id="${file.fId}">下载</a>
-                                    <a class="file_move_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home-file-move-modal">移动至</a>
-                                    <a class="friend_share_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home--file-friend-share-modal">分享给好友</a>
-                                    <a class="group_share_form_open_btn" f_id="${file.fId}"  data-toggle="modal" data-target="#home-file-group-share-modal">分享到群组</a>
-                                        <%--<div class="btn-group">--%>
-                                        <%--<button class="btn btn-default file_remove_btn" f_id="${file.fId}">删除</button>--%>
-                                        <%--<button class="btn btn-default file_download_btn" f_id="${file.fId}">下载</button>--%>
-                                        <%--<button class="btn btn-default file_move_form_open_btn" f_id="${file.fId}">移动至</button>--%>
-                                        <%--<button class="btn btn-default friend_share_form_open_btn" f_id="${file.fId}">分享给好友</button>--%>
-                                        <%--<button class="btn btn-default group_share_form_open_btn" f_id="${file.fId}">分享到群组</button>--%>
-                                        <%--</div>--%>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
-
                 <div class="modal fade" id="home-file-move-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -263,11 +240,6 @@
                         </div>
                     </div>
                 </div>
-
-
-
-
-
 
 
 

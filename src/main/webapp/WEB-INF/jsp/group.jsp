@@ -26,7 +26,7 @@
                 </form>
                 <form role="form"  id="form3" method="post" action="/group/${uId}">
                     <li class="active">
-                        <a href="#" onclick="$('#form3').submit();">
+                        <a id="active-a" href="#" onclick="$('#form3').submit();">
                             <span class="glyphicon glyphicon-retweet" aria-hidden="true"></span>
                             群组 <span class="sr-only">(current)</span></a>
                     </li>
@@ -83,6 +83,8 @@
                                 <%--<button type="button" id="search_group_form_close_btn" class="btn btn-default">取消</button>--%>
                             </div>
                         </form>
+                        <div id="search_result">
+                        </div>
                     </div>
                 </div>
 
@@ -95,8 +97,7 @@
 
 
 
-                <div id="search_result">
-                </div>
+
 
 
                 <table class="table table-hover table-condensed">

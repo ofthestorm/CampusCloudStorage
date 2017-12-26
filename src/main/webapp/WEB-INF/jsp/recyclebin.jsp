@@ -33,7 +33,7 @@
                 </form>
                 <form role="form"  id="form4" method="post" action="/recyclebin/${recyclebin}">
                     <li  class="active">
-                        <a href="#" onclick="$('#form4').submit();">
+                        <a id="active-a" href="#" onclick="$('#form4').submit();">
                             <span class="glyphicon glyphicon-trash" aria-hidden="true"></span>
                             回收站 <span class="sr-only">(current)</span></a>
                     </li>
@@ -57,33 +57,46 @@
                     </c:forEach>
                 </div>
 
-                <table class="table   table-hover table-condensed">
-                    <caption>文件夹</caption>
+                <table class="table   table-hover table-condensed" width="100%">
+                    <%--<caption>文件夹</caption>--%>
                     <thead>
                     <tr>
-                        <th>文件夹名</th>
+                        <th>ID</th>
+                        <th>名称</th>
+                        <th>大小</th>
+                        <th>创建/上传日期</th>
                         <th>操作</th>
                     </tr>
                     </thead>
                     <tbody>
                     <c:forEach var="dir" items="${dirList}">
                         <tr>
-                            <td>${dir.name}</td>
+                            <td>${dir.dId}</td>
+                            <td><span class="glyphicon glyphicon-folder-open icon-grey" style="color: rgb(180,180,180);" aria-hidden="true"></span> ${dir.name}</td>
+                            <td>-</td>
+                            <td>${dir.createTime}</td>
                             <td>
-                                <%--<div class="btn-group">--%>
-                                    <%--<button class="btn btn-default dir_open_btn" d_id="${dir.dId}">打开</button>--%>
-                                    <%--<button class="btn btn-default dir_recover_form_open_btn" d_id="${dir.dId}">恢复至</button>--%>
-                                    <%--<button class="btn btn-default dir_delete_btn" d_id="${dir.dId}">彻底删除</button>--%>
-                                <%--</div>--%>
-                                    <a class="dir_open_btn" d_id="${dir.dId}">打开</a>
-                                    <a class="dir_recover_form_open_btn" d_id="${dir.dId}"  data-toggle="modal" data-target="#bin-dir-recover-modal">恢复至</a>
-                                    <a class="dir_delete_btn" d_id="${dir.dId}">彻底删除</a>
-
+                                <a class="dir_open_btn" d_id="${dir.dId}">打开</a>
+                                <a class="dir_recover_form_open_btn" d_id="${dir.dId}"  data-toggle="modal" data-target="#bin-dir-recover-modal">恢复至</a>
+                                <a class="dir_delete_btn" d_id="${dir.dId}">彻底删除</a>
+                            </td>
+                        </tr>
+                    </c:forEach>
+                    <c:forEach var="file" items="${fileHeaderList}">
+                        <tr>
+                            <td width="5%">${file.fId}</td>
+                            <td width="25%"><span class="glyphicon glyphicon-file icon-grey" style="color: rgb(180,180,180);" aria-hidden="true"></span> ${file.name}</td>
+                            <td width="5%">${file.size}</td>
+                            <td width="25%">${file.submitTime}</td>
+                            <td width="40%">
+                                <a class="file_delete_btn" f_id="${file.fId}">彻底删除</a>
+                                <a class="file_recover_form_open_btn" f_id="${file.fId}" data-toggle="modal" data-target="#bin-file-recover-modal">恢复至</a>
                             </td>
                         </tr>
                     </c:forEach>
                     </tbody>
                 </table>
+
                 <div class="modal fade" id="bin-dir-recover-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
@@ -99,37 +112,6 @@
                         </div>
                     </div>
                 </div>
-
-                <table class="table   table-hover table-condensed" width="100%">
-                    <caption>文件</caption>
-                    <thead>
-                    <tr>
-                        <th>文件ID</th>
-                        <th>文件名</th>
-                        <th>大小</th>
-                        <th>上传日期</th>
-                        <th>操作</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <c:forEach var="file" items="${fileHeaderList}">
-                        <tr>
-                            <td width="10%">${file.fId}</td>
-                            <td width="20%">${file.name}</td>
-                            <td width="10%">${file.size}</td>
-                            <td width="20%">${file.submitTime}</td>
-                            <td width="40%">
-                                <%--<div class="btn-group">--%>
-                                    <%--<button class="btn btn-default file_delete_btn" f_id="${file.fId}">彻底删除</button>--%>
-                                    <%--<button class="btn btn-default file_recover_form_open_btn" f_id="${file.fId}">移动至</button>--%>
-                                <%--</div>--%>
-                                    <a class="file_delete_btn" f_id="${file.fId}">彻底删除</a>
-                                    <a class="file_recover_form_open_btn" f_id="${file.fId}" data-toggle="modal" data-target="#bin-file-recover-modal">恢复至</a>
-                            </td>
-                        </tr>
-                    </c:forEach>
-                    </tbody>
-                </table>
                 <div class="modal fade" id="bin-file-recover-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">

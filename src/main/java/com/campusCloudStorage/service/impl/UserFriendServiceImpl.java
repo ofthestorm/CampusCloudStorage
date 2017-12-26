@@ -62,10 +62,20 @@ public class UserFriendServiceImpl implements UserFriendService{
         return userFriendDao.updateByPrimaryKey(userFriend);
     }
 
+//    @Override
+//    public int deleteFriend(int uId, int friendId) {
+//        UserFriendKey userFriendKey=new UserFriendKey(friendId,uId);
+//        return userFriendDao.deleteByPrimaryKey(userFriendKey);
+//    }
     @Override
     public int deleteFriend(int uId, int friendId) {
         UserFriendKey userFriendKey=new UserFriendKey(friendId,uId);
-        return userFriendDao.deleteByPrimaryKey(userFriendKey);
+        int deleteCount=userFriendDao.deleteByPrimaryKey(userFriendKey);
+        if(deleteCount!=1){
+            userFriendKey=new UserFriendKey(uId,friendId);
+            deleteCount=userFriendDao.deleteByPrimaryKey(userFriendKey);
+        }
+        return deleteCount;
     }
 
     @Override

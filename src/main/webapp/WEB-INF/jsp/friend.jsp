@@ -19,7 +19,7 @@
                 </form>
                 <form role="form"  id="form2" method="post" action="/friend/${uId}">
                     <li class="active">
-                        <a href="#" onclick="$('#form2').submit();">
+                        <a id="active-a" href="#" onclick="$('#form2').submit();">
                             <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
                             好友 <span class="sr-only">(current)</span></a>
                     </li>
@@ -132,7 +132,6 @@
 
             </div>
         </div>
-
     </div>
 </div>
 
