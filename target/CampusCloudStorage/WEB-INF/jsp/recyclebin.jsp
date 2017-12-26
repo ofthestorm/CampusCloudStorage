@@ -43,12 +43,7 @@
 
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
             <div class="container">
-
                 <div>${msg}</div>
-
-
-
-
 
                 <div class="path">
                     当前路径:
@@ -58,7 +53,6 @@
                 </div>
 
                 <table class="table   table-hover table-condensed" width="100%">
-                    <%--<caption>文件夹</caption>--%>
                     <thead>
                     <tr>
                         <th>ID</th>

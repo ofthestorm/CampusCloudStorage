@@ -49,7 +49,7 @@
                 <div class="path">
                     当前路径:
                     <c:forEach var="dir" items="${pathList}">
-                        <span class="path_span" d_id="${dir.dId}"> ${dir.name}> </span>
+                        <span class="path_span" d_id="${dir.dId}"> ${dir.name} </span>
                     </c:forEach>
                 </div>
                 <br/>
@@ -70,7 +70,6 @@
                             <div class="form-inline">
                                 <input type="text" class="form-control" name="name" placeholder="请输入文件夹名" >
                                 <button type="submit" class="btn btn-default  btn-primary">新建</button>
-                                <%--<button type="button" id="dir_create_form_close_btn" class="btn btn-default">取消</button>--%>
                             </div>
                         </form>
                     </div>
@@ -88,7 +87,6 @@
                 <div>${msg}</div>
 
                 <table class="table table-hover table-condensed" width="100%">
-                    <%--<caption>文件夹</caption>--%>
                     <thead>
                     <tr>
                         <th>ID</th>
@@ -130,25 +128,6 @@
                     </c:forEach>
                     </tbody>
                 </table>
-
-
-
-                <%--<table class="table table-hover table-condensed" width="100%">--%>
-                    <%--<caption>文件</caption>--%>
-                    <%--<thead>--%>
-                    <%--<tr>--%>
-                        <%--<th>文件ID</th>--%>
-                        <%--<th>文件名</th>--%>
-                        <%--<th>大小</th>--%>
-                        <%--<th>上传日期</th>--%>
-                        <%--<th>操作</th>--%>
-                    <%--</tr>--%>
-                    <%--</thead>--%>
-                    <%--<tbody>--%>
-                    <%----%>
-                    <%--</tbody>--%>
-                <%--</table>--%>
-
                 <div class="modal fade" id="home-dir-rename-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">

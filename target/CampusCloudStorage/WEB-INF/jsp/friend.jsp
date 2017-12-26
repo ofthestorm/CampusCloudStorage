@@ -143,8 +143,6 @@
 
 <script type="text/javascript">
     $(function () {
-//        $('#search_user_form').hide();
-
         $('.agree_btn').click(function () {
             var u_id=${uId};
             var friend_id=$(this).attr('friend_id');
@@ -198,7 +196,6 @@
         })
 
         $('#search_user_form_close_btn').click(function () {
-//            $('#search_user_form').hide();
             $('#search_user_form_open_btn').show();
             $('#msg').hide();
         })

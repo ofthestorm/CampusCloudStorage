@@ -87,19 +87,6 @@
                         </div>
                     </div>
                 </div>
-
-                <%--<div class="btn-group">--%>
-                    <%--<button id="create_group_form_open_btn" class="btn btn-default">创建群组</button>--%>
-                    <%--<button id="search_group_form_open_btn" class="btn btn-default">查找群组</button>--%>
-                <%--</div>--%>
-
-
-
-
-
-
-
-
                 <table class="table table-hover table-condensed">
                     <caption>我创建的群组列表</caption>
                     <thead>
@@ -117,10 +104,6 @@
                             <td>${group.name}</td>
                             <td>${group.type}</td>
                             <td>
-                                <%--<div class="btn-group">--%>
-                                    <%--<button class="btn btn-default detail_group_btn" group_id="${group.gId}">查看详情</button>--%>
-                                    <%--<button class="btn btn-default delete_group_btn" group_id="${group.gId}">解散群组</button>--%>
-                                <%--</div>--%>
                                     <a class="detail_group_btn" group_id="${group.gId}">查看详情</a>
                                     <a class="delete_group_btn" group_id="${group.gId}">解散群组</a>
                             </td>
